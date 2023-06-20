@@ -14,7 +14,8 @@ fluidPage(
              p("span does the same thing as div, but it works with",
                span("groups of words", style = "color:blue"),
                "that appear inside a paragraph."),
-             a(href="http://www.google.com", "link to Google")),
+             a(href="http://www.google.com", "link to Google"),
+             strong(textOutput('numDonors'))),
     tabPanel("Data table", DT::dataTableOutput("mainTable")),
     tabPanel("Histogram", sidebarLayout(
       mainPanel(),
