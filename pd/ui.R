@@ -18,13 +18,27 @@ fluidPage(
              strong(textOutput('numDonors'))),
     tabPanel("Data table", DT::dataTableOutput("mainTable")),
     tabPanel("Histogram", sidebarLayout(
-      mainPanel(),
-      sidebarPanel(),
+      sidebarPanel(
+        selectInput("variable", "Variable:",
+                    list("HTML Code tester",
+                         "Font Styler", 
+                         "CSS3 Generator"=c( "Box Shadow", "Border Radius"))),
+        colourInput(inputId = "col", label="Select colour", value="purple", showColour="both", palette="square", returnName=T),
+        
+      ),
+      mainPanel(
+
+      ),
       position = c("left", "right"),
       fluid = TRUE
     )),
     tabPanel("Boxplot"),
     tabPanel("Scatterplot"),
-    tabPanel("Correlation Matrix")
+    tabPanel("Correlation Matrix", sidebarLayout(
+      sidebarPanel(),
+      mainPanel(),
+      position=c("left", "right"),
+      fluid = TRUE
+    ))
     )
   )

@@ -2,6 +2,7 @@ library(shiny)
 library(ggplot2)
 
 dat <- read.csv("data/data.csv", row.names=1)
+dat$Group <- as.factor(dat$Group)
 dat$Dementia...cognitive.impairment <- as.factor(dat$Dementia...cognitive.impairment)
 dat$Depression <- factor(dat$Depression)
 dat$Memory.problems <- as.factor(dat$Memory.problems)
@@ -18,6 +19,41 @@ dat$Vessel.disease...CAA <- factor(dat$Vessel.disease...CAA, ordered=TRUE)
 dat$Age <- as.numeric(dat$Age)
 dat$PD.duration <- as.numeric(dat$PD.duration)
 dat$Gender <- as.factor(dat$Gender)
+
+names(dat)[2] <- "Brain Bank ID"
+names(dat)[3] <- "Age (years)"
+names(dat)[5] <- "Amyloid pathology"
+names(dat)[6] <- "Dementia / cognitive impairment"
+names(dat)[10] <- "LB Braak stage"
+names(dat)[11] <- "LB disease type"
+names(dat)[12] <- "Memory problems"
+names(dat)[13] <- "PD duration (years)"
+names(dat)[14] <- "Psychotic symptoms"
+names(dat)[15] <- "Sleep disturbance"
+names(dat)[16] <- "Substantia nigra depigmentation"
+names(dat)[17] <- "Tau pathology"
+names(dat)[18] <- "Vessel disease / cerebral amyloid angiopathy"
+
+names(dat)[19] <- "ALdh1L1 expression in substantia nigra"
+names(dat)[20] <- "Aldh1L1 expression in parietal cortex"
+names(dat)[21] <- "Aldh1l1 expression in striatum of basal ganglia"
+names(dat)[22] <- "Cx43 expression in substantia nigra"
+names(dat)[23] <- "Cx43 expression in parietal cortex"
+names(dat)[24] <- "Cx43 expression in striatum of basal ganglia"
+names(dat)[25] <- "GDNF expression in substantia nigra"
+names(dat)[26] <- "GDNF expression in parietal cortex"
+names(dat)[27] <- "GDNF expression in striatum of basal ganglia"
+names(dat)[28] <- "GFAP expression in substantia nigra"
+names(dat)[29] <- "GFAP expression in parietal cortex"
+names(dat)[30] <- "GFAP expression in striatum of basal ganglia"
+
+names(dat)[31] <- "Puncta per cell in caudate nucleus of basal ganglia"
+names(dat)[32] <- "Puncta per cell in globus pallidus of basal ganglia"
+names(dat)[33] <- "Puncta per cell in putamen of basal ganglia"
+names(dat)[34] <- "Puncta per cell in frontal cortex"
+names(dat)[35] <- "Puncta per cell in insular cortex"
+names(dat)[36] <- "Puncta per cell in substantia nigra"
+names(dat)[37] <- "Puncta per cell in parietal cortex"
 
 #function(input, output) {
 shinyServer(function(input, output, session) {
