@@ -74,7 +74,6 @@ shinyServer(function(input, output, session) {
   })
   
 
-  
   output$numDonors<-reactive({paste("Number of donors:", numDonors(), sep=" ")})
   
 }
