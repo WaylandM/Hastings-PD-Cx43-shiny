@@ -55,6 +55,29 @@ names(dat)[35] <- "Puncta per cell in insular cortex"
 names(dat)[36] <- "Puncta per cell in substantia nigra"
 names(dat)[37] <- "Puncta per cell in parietal cortex"
 
+continuousVars <- c("Age (years)", 
+                    "PD duration (years)", 
+                    "ALdh1L1 expression in substantia nigra",
+                    "Aldh1L1 expression in parietal cortex",
+                    "Aldh1l1 expression in striatum of basal ganglia",
+                    "Cx43 expression in substantia nigra",
+                    "Cx43 expression in parietal cortex",
+                    "Cx43 expression in striatum of basal ganglia",
+                    "GDNF expression in substantia nigra",
+                    "GDNF expression in parietal cortex",
+                    "GDNF expression in striatum of basal ganglia",
+                    "GFAP expression in substantia nigra",
+                    "GFAP expression in parietal cortex",
+                    "GFAP expression in striatum of basal ganglia",
+                    "Puncta per cell in caudate nucleus of basal ganglia",
+                    "Puncta per cell in globus pallidus of basal ganglia",
+                    "Puncta per cell in putamen of basal ganglia",
+                    "Puncta per cell in frontal cortex",
+                    "Puncta per cell in insular cortex",
+                    "Puncta per cell in substantia nigra",
+                    "Puncta per cell in parietal cortex")
+
+
 #function(input, output) {
 shinyServer(function(input, output, session) {
 
@@ -75,6 +98,13 @@ shinyServer(function(input, output, session) {
   
 
   output$numDonors<-reactive({paste("Number of donors:", numDonors(), sep=" ")})
+  
+  #histogram <- ggplot(data=dat, aes(x=input$histVar)) + 
+    #geom_histogram()
+  
+  output$histogram <- renderPlot({ggplot(data=dat, aes(x=get(input$histVar))) + 
+                                   geom_histogram() +
+      theme_minimal()}, height=800)
   
 }
 )

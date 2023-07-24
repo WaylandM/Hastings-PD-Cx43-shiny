@@ -19,15 +19,33 @@ fluidPage(
     tabPanel("Data table", DT::dataTableOutput("mainTable")),
     tabPanel("Histogram", sidebarLayout(
       sidebarPanel(
-        selectInput("variable", "Variable:",
-                    list("HTML Code tester",
-                         "Font Styler", 
-                         "CSS3 Generator"=c( "Box Shadow", "Border Radius"))),
+        selectInput(inputId="histVar", label="Variable:", 
+                    choices=list("Donor Metadata"=c("Age (years)", 
+                                                    "PD duration (years)"),
+                                 "Protein Expression"=c("ALdh1L1 expression in substantia nigra",
+                                                        "Aldh1L1 expression in parietal cortex",
+                                                        "Aldh1l1 expression in striatum of basal ganglia",
+                                                        "Cx43 expression in substantia nigra",
+                                                        "Cx43 expression in parietal cortex",
+                                                        "Cx43 expression in striatum of basal ganglia",
+                                                        "GDNF expression in substantia nigra",
+                                                        "GDNF expression in parietal cortex",
+                                                        "GDNF expression in striatum of basal ganglia",
+                                                        "GFAP expression in substantia nigra",
+                                                        "GFAP expression in parietal cortex",
+                                                        "GFAP expression in striatum of basal ganglia"),
+                                 "Puncta per cell"=c("Puncta per cell in caudate nucleus of basal ganglia",
+                                                     "Puncta per cell in globus pallidus of basal ganglia",
+                                                     "Puncta per cell in putamen of basal ganglia",
+                                                     "Puncta per cell in frontal cortex",
+                                                     "Puncta per cell in insular cortex",
+                                                     "Puncta per cell in substantia nigra",
+                                                     "Puncta per cell in parietal cortex"))),
         colourInput(inputId = "col", label="Select colour", value="purple", showColour="both", palette="square", returnName=T),
         
       ),
       mainPanel(
-
+        plotOutput('histogram')
       ),
       position = c("left", "right"),
       fluid = TRUE
