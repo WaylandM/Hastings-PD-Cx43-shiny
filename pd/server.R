@@ -102,9 +102,9 @@ shinyServer(function(input, output, session) {
   output$histogram <- renderPlot({ggplot(data=dat, aes(x=get(input$histVar))) + 
                                    geom_histogram(bins=input$histBins, fill=input$histCol) +
       theme_minimal() +
-      theme(axis.title.x = element_text(size = rel(2.5)),
+      theme(axis.title.x = element_text(size = rel(2)),
             axis.text.x = element_text(size = rel(2.5)),
-            axis.title.y = element_text(size = rel(2.5)),
+            axis.title.y = element_text(size = rel(2)),
             axis.text.y = element_text(size = rel(2.5))) +
       labs(x=input$histVar, y="Count")}, height=600)
   
