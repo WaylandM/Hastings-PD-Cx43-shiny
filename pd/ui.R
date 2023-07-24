@@ -41,8 +41,8 @@ fluidPage(
                                                      "Puncta per cell in insular cortex",
                                                      "Puncta per cell in substantia nigra",
                                                      "Puncta per cell in parietal cortex"))),
-        colourInput(inputId = "col", label="Select colour", value="purple", showColour="both", palette="square", returnName=T),
-        
+        colourInput(inputId = "histCol", label="Select colour", value="slateblue", showColour="both", palette="square", returnName=T),
+        sliderInput(inputId = "histBins", label="Number of bins", min=5, max=20, value=10)
       ),
       mainPanel(
         plotOutput('histogram')

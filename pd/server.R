@@ -99,12 +99,14 @@ shinyServer(function(input, output, session) {
 
   output$numDonors<-reactive({paste("Number of donors:", numDonors(), sep=" ")})
   
-  #histogram <- ggplot(data=dat, aes(x=input$histVar)) + 
-    #geom_histogram()
-  
   output$histogram <- renderPlot({ggplot(data=dat, aes(x=get(input$histVar))) + 
-                                   geom_histogram() +
-      theme_minimal()}, height=800)
+                                   geom_histogram(bins=input$histBins, fill=input$histCol) +
+      theme_minimal() +
+      theme(axis.title.x = element_text(size = rel(2.5)),
+            axis.text.x = element_text(size = rel(2.5)),
+            axis.title.y = element_text(size = rel(2.5)),
+            axis.text.y = element_text(size = rel(2.5))) +
+      labs(x=input$histVar, y="Count")}, height=600)
   
 }
 )
