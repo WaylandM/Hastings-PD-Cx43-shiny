@@ -43,8 +43,8 @@ fluidPage(
                                                      "Puncta per cell in parietal cortex"))),
         colourInput(inputId = "histCol", label="Select colour", value="slateblue", showColour="both", palette="square", returnName=T),
         sliderInput(inputId = "histBins", label="Number of bins", min=5, max=20, value=10),
-        downloadButton('downloadPDF', 'PDF Histogram'), 
-        downloadButton('downloadPNG', 'PNG Histogram')
+        downloadButton('downloadHistPDF', 'PDF Histogram'), 
+        downloadButton('downloadHistPNG', 'PNG Histogram')
       ),
       mainPanel(
         plotOutput('histogram')

@@ -1,5 +1,8 @@
 library(shiny)
 library(ggplot2)
+library(colourpicker)
+library(reactCheckbox)
+library(corrplot)
 
 dat <- read.csv("data/data.csv", row.names=1)
 dat$Group <- as.factor(dat$Group)
@@ -87,19 +90,20 @@ shinyServer(function(input, output, session) {
   })
   
   idxFilt <- reactive({input$mainTable_rows_all})
-  numDonors <- reactive({
+  
+  datFilt <- reactive({
     if (is.null(idxFilt())){
-      return(40)
+      datFilt <- dat
     } else {
-      #return(length(unlist(idxFilt())))
-      dim(dat[idxFilt(),])[1]
+      datFilt <- dat[idxFilt(),]
     }
   })
   
+  numDonors <- reactive({dim(datFilt())[1]})
 
   output$numDonors<-reactive({paste("Number of donors:", numDonors(), sep=" ")})
   
-  output$histogram <- renderPlot({ggplot(data=dat, aes(x=get(input$histVar))) + 
+  output$histogram <- renderPlot({ggplot(data=datFilt(), aes(x=get(input$histVar))) + 
                                    geom_histogram(bins=input$histBins, fill=input$histCol) +
       theme_minimal() +
       theme(axis.title.x = element_text(size = rel(2)),
@@ -107,6 +111,17 @@ shinyServer(function(input, output, session) {
             axis.title.y = element_text(size = rel(2)),
             axis.text.y = element_text(size = rel(2.5))) +
       labs(x=input$histVar, y="Count")}, height=600)
+  
+ 
+  
+  #output$histogram <- renderPlot({print(histInput())})
+  
+  output$downloadPDF <- downloadHandler(
+    filename = function() { paste("histogram ", input$histVar, '.pdf', sep='') },
+    content = function(file) {
+      ggsave(file, plot = plotInput(), device = "pdf")
+    }
+  )
   
 }
 )
