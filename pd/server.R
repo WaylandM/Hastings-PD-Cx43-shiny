@@ -87,7 +87,7 @@ shinyServer(function(input, output, session) {
 
   output$mainTable <- DT::renderDataTable({
     DT::datatable(dat, extensions='Buttons', options = list(lengthMenu = c(10, 20, 40), pageLength = 40, dom = 'Bfrtip',
-                                      buttons = c('copy', 'csv', 'excel', 'pdf', 'print')), rownames=F, filter="top")
+                                      buttons = c('copy', 'csv', 'excel')), rownames=F, filter="top")
   })
   
   idxFilt <- reactive({input$mainTable_rows_all})
@@ -120,14 +120,14 @@ shinyServer(function(input, output, session) {
   output$downloadHistPDF <- downloadHandler(
     filename = function() { paste("histogram ", input$histVar, '.pdf', sep='') },
     content = function(file) {
-      ggsave(file, plot = histoPlot(), device = "pdf")
+      ggsave(file, plot = histoPlot(), device = "pdf", units="mm", width=180, height=120)
     }
   )
   
   output$downloadHistPNG <- downloadHandler(
     filename = function() { paste("histogram ", input$histVar, '.png', sep='') },
     content = function(file) {
-      ggsave(file, plot = histoPlot(), device = "png", bg = 'white')
+      ggsave(file, plot = histoPlot(), device = "png", bg = 'white', units="mm", width=180, height=120)
     }
   )
   
