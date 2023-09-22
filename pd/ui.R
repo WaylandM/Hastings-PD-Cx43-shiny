@@ -1,3 +1,33 @@
+library(shiny)
+library(htmltools)
+library(ggplot2)
+library(colourpicker)
+library(reactCheckbox)
+library(corrplot)
+
+
+variableList=list("Donor Metadata"=c("Age (years)", 
+                                "PD duration (years)"),
+             "Protein Expression"=c("ALdh1L1 expression in substantia nigra",
+                                    "Aldh1L1 expression in parietal cortex",
+                                    "Aldh1l1 expression in striatum of basal ganglia",
+                                    "Cx43 expression in substantia nigra",
+                                    "Cx43 expression in parietal cortex",
+                                    "Cx43 expression in striatum of basal ganglia",
+                                    "GDNF expression in substantia nigra",
+                                    "GDNF expression in parietal cortex",
+                                    "GDNF expression in striatum of basal ganglia",
+                                    "GFAP expression in substantia nigra",
+                                    "GFAP expression in parietal cortex",
+                                    "GFAP expression in striatum of basal ganglia"),
+             "Puncta per cell"=c("Puncta per cell in caudate nucleus of basal ganglia",
+                                 "Puncta per cell in globus pallidus of basal ganglia",
+                                 "Puncta per cell in putamen of basal ganglia",
+                                 "Puncta per cell in frontal cortex",
+                                 "Puncta per cell in insular cortex",
+                                 "Puncta per cell in substantia nigra",
+                                 "Puncta per cell in parietal cortex"))
+
 fluidPage(
   title = "Neuropathology of Parkinson's patients vs controls.",
   titlePanel("Neuropathology of Parkinson's disease"),
@@ -20,27 +50,7 @@ fluidPage(
     tabPanel("Histogram", sidebarLayout(
       sidebarPanel(
         selectInput(inputId="histVar", label="Variable:", 
-                    choices=list("Donor Metadata"=c("Age (years)", 
-                                                    "PD duration (years)"),
-                                 "Protein Expression"=c("ALdh1L1 expression in substantia nigra",
-                                                        "Aldh1L1 expression in parietal cortex",
-                                                        "Aldh1l1 expression in striatum of basal ganglia",
-                                                        "Cx43 expression in substantia nigra",
-                                                        "Cx43 expression in parietal cortex",
-                                                        "Cx43 expression in striatum of basal ganglia",
-                                                        "GDNF expression in substantia nigra",
-                                                        "GDNF expression in parietal cortex",
-                                                        "GDNF expression in striatum of basal ganglia",
-                                                        "GFAP expression in substantia nigra",
-                                                        "GFAP expression in parietal cortex",
-                                                        "GFAP expression in striatum of basal ganglia"),
-                                 "Puncta per cell"=c("Puncta per cell in caudate nucleus of basal ganglia",
-                                                     "Puncta per cell in globus pallidus of basal ganglia",
-                                                     "Puncta per cell in putamen of basal ganglia",
-                                                     "Puncta per cell in frontal cortex",
-                                                     "Puncta per cell in insular cortex",
-                                                     "Puncta per cell in substantia nigra",
-                                                     "Puncta per cell in parietal cortex"))),
+                    choices=variableList),
         colourInput(inputId = "histCol", label="Select colour", value="slateblue", showColour="both", palette="square", returnName=T),
         sliderInput(inputId = "histBins", label="Number of bins", min=5, max=20, value=10),
         downloadButton('downloadHistPDF', 'PDF Histogram'), 
@@ -55,7 +65,43 @@ fluidPage(
     tabPanel("Boxplot"),
     tabPanel("Scatterplot"),
     tabPanel("Correlation Matrix", sidebarLayout(
-      sidebarPanel(),
+      sidebarPanel(reactCheckboxesInput(
+        "iris",
+        list(
+          checkbox("Sepal length", FALSE),
+          checkbox("Sepal width", FALSE),
+          checkbox("Petal length", FALSE),
+          checkbox("Petal width", FALSE)
+        ),
+        headLabel = tags$span(
+          "Make a choice", style = "font-size: 1.8rem; font-style: italic;"
+        ),
+        headClass = "custom",
+        theme = "material",
+        styles = list(
+          "custom" = checkboxStyle(
+            checked = css(
+              background.color = "darkred"
+            ),
+            checked_hover = css(
+              background.color = "maroon"
+            ),
+            unchecked = css(
+              background.color = "darkorange"
+            ),
+            unchecked_hover = css(
+              background.color = "orange"
+            ),
+            indeterminate = css(
+              background.color = "gold"
+            ),
+            indeterminate_hover = css(
+              background.color = "yellow"
+            )
+          )
+        )
+      )
+      ),
       mainPanel(),
       position=c("left", "right"),
       fluid = TRUE

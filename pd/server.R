@@ -1,4 +1,5 @@
 library(shiny)
+library(htmltools)
 library(ggplot2)
 library(colourpicker)
 library(reactCheckbox)
@@ -103,23 +104,30 @@ shinyServer(function(input, output, session) {
 
   output$numDonors<-reactive({paste("Number of donors:", numDonors(), sep=" ")})
   
-  output$histogram <- renderPlot({ggplot(data=datFilt(), aes(x=get(input$histVar))) + 
+  histoPlot <- reactive({ggplot(data=datFilt(), aes(x=get(input$histVar))) + 
                                    geom_histogram(bins=input$histBins, fill=input$histCol) +
       theme_minimal() +
       theme(axis.title.x = element_text(size = rel(2)),
             axis.text.x = element_text(size = rel(2.5)),
             axis.title.y = element_text(size = rel(2)),
             axis.text.y = element_text(size = rel(2.5))) +
-      labs(x=input$histVar, y="Count")}, height=600)
+      labs(x=input$histVar, y="Count")})
   
- 
+  output$histogram <- renderPlot({print(histoPlot())}, height=600)
   
   #output$histogram <- renderPlot({print(histInput())})
   
-  output$downloadPDF <- downloadHandler(
+  output$downloadHistPDF <- downloadHandler(
     filename = function() { paste("histogram ", input$histVar, '.pdf', sep='') },
     content = function(file) {
-      ggsave(file, plot = plotInput(), device = "pdf")
+      ggsave(file, plot = histoPlot(), device = "pdf")
+    }
+  )
+  
+  output$downloadHistPNG <- downloadHandler(
+    filename = function() { paste("histogram ", input$histVar, '.png', sep='') },
+    content = function(file) {
+      ggsave(file, plot = histoPlot(), device = "png", bg = 'white')
     }
   )
   
