@@ -5,8 +5,9 @@ library(colourpicker)
 library(reactCheckbox)
 library(corrplot)
 
+#donorVariableList
 
-variableList=list("Donor Metadata"=c("Age (years)", 
+continuousVariableList=list("Donor Metadata"=c("Age (years)", 
                                 "PD duration (years)"),
              "Protein Expression"=c("ALdh1L1 expression in substantia nigra",
                                     "Aldh1L1 expression in parietal cortex",
@@ -48,9 +49,9 @@ fluidPage(
              strong(textOutput('numDonors'))),
     tabPanel("Data table", DT::dataTableOutput("mainTable")),
     tabPanel("Histogram", sidebarLayout(
-      sidebarPanel(
+      sidebarPanel(width=3,
         selectInput(inputId="histVar", label="Variable:", 
-                    choices=variableList),
+                    choices=continuousVariableList),
         colourInput(inputId = "histCol", label="Select colour", value="slateblue", showColour="both", palette="square", returnName=T),
         sliderInput(inputId = "histBins", label="Number of bins", min=5, max=20, value=10),
         downloadButton('downloadHistPDF', 'PDF Histogram'), 
@@ -65,7 +66,8 @@ fluidPage(
     tabPanel("Boxplot"),
     tabPanel("Scatterplot"),
     tabPanel("Correlation Matrix", sidebarLayout(
-      sidebarPanel(reactCheckboxesInput(
+      sidebarPanel(width=2,
+                   reactCheckboxesInput(
         "iris",
         list(
           checkbox("Sepal length", FALSE),
@@ -102,9 +104,11 @@ fluidPage(
         )
       )
       ),
+      
       mainPanel(),
       position=c("left", "right"),
       fluid = TRUE
-    ))
+    )),
+
     )
   )

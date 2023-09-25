@@ -81,7 +81,6 @@ continuousVars <- c("Age (years)",
                     "Puncta per cell in substantia nigra",
                     "Puncta per cell in parietal cortex")
 
-
 #function(input, output) {
 shinyServer(function(input, output, session) {
 
