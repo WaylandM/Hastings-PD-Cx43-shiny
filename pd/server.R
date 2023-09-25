@@ -2,8 +2,9 @@ library(shiny)
 library(htmltools)
 library(ggplot2)
 library(colourpicker)
-library(reactCheckbox)
+library(shinyWidgets)
 library(corrplot)
+library(Hmisc)
 
 dat <- read.csv("data/data.csv", row.names=1)
 dat$Group <- as.factor(dat$Group)
@@ -129,6 +130,18 @@ shinyServer(function(input, output, session) {
       ggsave(file, plot = histoPlot(), device = "png", bg = 'white', units="mm", width=180, height=120)
     }
   )
+  
+  corMatPlot <- reactive({
+    corMatSpearman <- rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
+    corrplot(corMatSpearman$r, method="circle")
+  })
+  
+  output$corMat <- renderPlot({print(corMatPlot())}, height=600)
+  
+  observe({
+    print(input[["corMatVars"]])
+    print(is.element(names(dat), input[["corMatVars"]]))
+  })
   
 }
 )
