@@ -163,6 +163,30 @@ shinyServer(function(input, output, session) {
   )
   
   
+  output$downloadR <- downloadHandler(
+    filename = "Spearmans_correlation_coefficient.csv",
+    content = function(file) {
+      cms <- corMatSpearman()
+      write.csv(cms$r, file, row.names=T, quote=F)
+    }
+  )
+  
+  output$downloadP <- downloadHandler(
+    filename = "Spearmans_correlation_p-value.csv",
+    content = function(file) {
+      cms <- corMatSpearman()
+      write.csv(cms$P, file, row.names=T, quote=F)
+    }
+  )
+  
+  output$downloadN <- downloadHandler(
+    filename = "Spearmans_correlation_number_observations.csv",
+    content = function(file) {
+      cms <- corMatSpearman()
+      write.csv(cms$n, file, row.names=T, quote=F)
+    }
+  )
+  
   
   
   #observe({

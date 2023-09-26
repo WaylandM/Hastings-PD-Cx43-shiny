@@ -20,8 +20,8 @@ cities <- data.frame(
 )
 
 continuousVariableDF <- data.frame(
-  category=c(rep("Donor Metadata",2),
-             rep("Protein Expression",12),
+  category=c(rep("Donor metadata",2),
+             rep("Protein expression",12),
              rep("Puncta per cell", 7)),
   variable=c("Age (years)",
              "PD duration (years)",
@@ -48,9 +48,9 @@ continuousVariableDF <- data.frame(
 )
 
 continuousVariableList <- list(
-  "Donor Metadata"=c("Age (years)", 
+  "Donor metadata"=c("Age (years)", 
                      "PD duration (years)"),
-  "Protein Expression"=c("ALdh1L1 expression in substantia nigra",
+  "Protein expression"=c("ALdh1L1 expression in substantia nigra",
                          "Aldh1L1 expression in parietal cortex",
                          "Aldh1l1 expression in striatum of basal ganglia",
                          "Cx43 expression in substantia nigra",
@@ -113,13 +113,18 @@ fluidPage(
                      inputId = "corMatVars",
                      label = "Select variables:",
                      choices = create_tree(continuousVariableDF),
-                     selected = c("Donor Metadata", "Protein Expression", "Puncta per cell"),
+                     selected = c("Donor metadata", "Protein expression", "Puncta per cell"),
                      returnValue = "text",
                      closeDepth = 0),
                    downloadButton('downloadCorPlotPDF', 'PDF Correlation Plot'), 
+                   downloadButton('downloadCorPlotPNG', 'PNG Correlation Plot'),
                    br(),
                    br(),
-                   downloadButton('downloadCorPlotPNG', 'PNG Correlation Plot')
+                   downloadButton('downloadR', 'Correlation Coefficient'),
+                   downloadButton('downloadP', 'Correlation P-value'),
+                   br(),
+                   br(),
+                   downloadButton('downloadN', 'Number of observations')
                    ),
       
       mainPanel(
