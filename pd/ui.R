@@ -19,12 +19,17 @@ cities <- data.frame(
   stringsAsFactors = FALSE
 )
 
-continuousVariableDF <- data.frame(
-  category=c(rep("Donor metadata",2),
+corrVariableDF <- data.frame(
+  category=c(rep("Donor metadata",7),
              rep("Protein expression",12),
              rep("Puncta per cell", 7)),
   variable=c("Age (years)",
+             "Amyloid pathology",
+             "LB Braak stage",
              "PD duration (years)",
+             "Substantia nigra depigmentation",
+             "Tau pathology",
+             "Vessel disease / cerebral amyloid angiopathy",
              "ALdh1L1 expression in substantia nigra",
              "Aldh1L1 expression in parietal cortex",
              "Aldh1l1 expression in striatum of basal ganglia",
@@ -68,8 +73,21 @@ continuousVariableList <- list(
                       "Puncta per cell in frontal cortex",
                       "Puncta per cell in insular cortex",
                       "Puncta per cell in substantia nigra",
-                      "Puncta per cell in parietal cortex"),
-  stringsAsFactors = FALSE)
+                      "Puncta per cell in parietal cortex")
+  )
+
+categoryList <- c("Group",
+                  "Aggression",
+                  "Dementia / cognitive impairment",
+                  "Depression",
+                  "Gender",
+                  "Hallucinations",
+                  "LB disease type",
+                  "Memory problems",
+                  "Psychotic symptoms",
+                  "Sleep disturbance",
+                  "None"
+                  )
 
 fluidPage(
   title = "Neuropathology of Parkinson's patients vs controls.",
@@ -89,7 +107,7 @@ fluidPage(
                "that appear inside a paragraph."),
              a(href="http://www.google.com", "link to Google"),
              strong(textOutput('numDonors'))),
-    tabPanel("Data table", DT::dataTableOutput("mainTable")),
+    tabPanel("Select donors", DT::dataTableOutput("mainTable")),
     tabPanel("Histogram", sidebarLayout(
       sidebarPanel(width=4,
         selectInput(inputId="histVar", label="Variable:", 
@@ -105,14 +123,36 @@ fluidPage(
       position = c("left", "right"),
       fluid = TRUE
     )),
-    tabPanel("Boxplot"),
-    tabPanel("Scatterplot"),
+    tabPanel("Boxplot", sidebarLayout(
+      sidebarPanel(width=4,
+                   selectInput(inputId="boxplotVar", label="Variable:",
+                               choices=continuousVariableList),
+                   selectInput(inputId="boxplotCategory", label="Category:",
+                               choices=categoryList),
+                   ),
+      mainPanel(
+        
+      ),
+    )),
+    tabPanel("Scatterplot", sidebarLayout(
+      sidebarPanel(width=4,
+                   selectInput(inputId="xVar", label="X-axis variable:",
+                               choices=continuousVariableList),
+                   selectInput(inputId="yVar", label="Y-axis variable:",
+                               choices=continuousVariableList),
+                   selectInput(inputId="scatterplotCategory", label="Category:",
+                               choices=categoryList),
+                   ),
+      mainPanel(
+        
+      ),
+    )),
     tabPanel("Correlation Matrix", sidebarLayout(
       sidebarPanel(width=3,
                    treeInput(
                      inputId = "corMatVars",
                      label = "Select variables:",
-                     choices = create_tree(continuousVariableDF),
+                     choices = create_tree(corrVariableDF),
                      selected = c("Donor metadata", "Protein expression", "Puncta per cell"),
                      returnValue = "text",
                      closeDepth = 0),

@@ -155,7 +155,7 @@ shinyServer(function(input, output, session) {
   output$downloadCorPlotPNG <- downloadHandler(
     filename = "correlation_plot.png",
     content = function(file) {
-      png(file, res=1000, units="mm", width=200, height=200)
+      png(file, res=1000, units="mm", width=250, height=250)
       corMatSpearman <- rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
       corrplot(corMatSpearman$r, method="circle")
       dev.off()
