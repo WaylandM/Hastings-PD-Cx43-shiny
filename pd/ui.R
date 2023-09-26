@@ -115,7 +115,12 @@ fluidPage(
                      choices = create_tree(continuousVariableDF),
                      selected = c("Donor Metadata", "Protein Expression", "Puncta per cell"),
                      returnValue = "text",
-                     closeDepth = 0)),
+                     closeDepth = 0),
+                   downloadButton('downloadCorPlotPDF', 'PDF Correlation Plot'), 
+                   br(),
+                   br(),
+                   downloadButton('downloadCorPlotPNG', 'PNG Correlation Plot')
+                   ),
       
       mainPanel(
         plotOutput('corMat')

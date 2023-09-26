@@ -131,17 +131,44 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  corMatSpearman <- reactive({
+    rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
+  })
+  
   corMatPlot <- reactive({
-    corMatSpearman <- rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
-    corrplot(corMatSpearman$r, method="circle")
+    cms <- corMatSpearman()
+    corrplot(cms$r, method="circle")
   })
   
   output$corMat <- renderPlot({print(corMatPlot())}, height=600)
   
-  observe({
-    print(input[["corMatVars"]])
-    print(is.element(names(dat), input[["corMatVars"]]))
-  })
+  output$downloadCorPlotPDF <- downloadHandler(
+    filename = "correlation_plot.pdf",
+    content = function(file) {
+      pdf(file, width=10, height=10, title="Correlation Plot")
+      cms <- corMatSpearman()
+      corrplot(cms$r, method="circle")
+      dev.off()
+    }
+  )
+  
+  output$downloadCorPlotPNG <- downloadHandler(
+    filename = "correlation_plot.png",
+    content = function(file) {
+      png(file, res=1000, units="mm", width=200, height=200)
+      corMatSpearman <- rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
+      corrplot(corMatSpearman$r, method="circle")
+      dev.off()
+    }
+  )
+  
+  
+  
+  
+  #observe({
+    #print(input[["corMatVars"]])
+    #print(is.element(names(dat), input[["corMatVars"]]))
+  #})
   
 }
 )
