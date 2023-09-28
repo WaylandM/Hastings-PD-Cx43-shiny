@@ -25,6 +25,7 @@ dat$Age <- as.numeric(dat$Age)
 dat$PD.duration <- as.numeric(dat$PD.duration)
 dat$Gender <- as.factor(dat$Gender)
 
+names(dat)[1] <- "Group (PD/Control)"
 names(dat)[2] <- "Brain Bank ID"
 names(dat)[3] <- "Age (years)"
 names(dat)[5] <- "Amyloid pathology"
@@ -131,6 +132,18 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  
+  boxplotPlot <- reactive({ggplot(data=datFilt(), aes(x=get(input$boxplotGroup), y=get(input$boxplotVar), fill=get(input$boxplotGroup))) +
+                                    geom_boxplot(outlier.size=5) + scale_fill_brewer(palette="Dark2") + theme_minimal() +
+      theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+                                            axis.text.x = element_text(size = rel(2.5)),
+                                            axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
+                                            axis.text.y = element_text(size = rel(2.5))) +
+      labs(x=input$boxplotGroup, y=input$boxplotVar)})
+  
+  output$boxplotPlot <- renderPlot({print(boxplotPlot())}, height=600)
+  
+  
   corMatSpearman <- reactive({
     rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
   })
@@ -186,6 +199,7 @@ shinyServer(function(input, output, session) {
       write.csv(cms$n, file, row.names=T, quote=F)
     }
   )
+  
   
   
   

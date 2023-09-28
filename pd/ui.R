@@ -6,19 +6,6 @@ library(shinyWidgets)
 library(corrplot)
 library(Hmisc)
 
-#donorVariableList
-
-cities <- data.frame(
-  continent = c("America", "America", "America", "Africa",
-                "Africa", "Africa", "Africa", "Africa",
-                "Europe", "Europe", "Europe", "Antarctica"),
-  country = c("Canada", "Canada", "USA", "Tunisia", "Tunisia",
-              "Tunisia", "Algeria", "Algeria", "Italy", "Germany", "Spain", NA),
-  city = c("Trois-Rivières", "Québec", "San Francisco", "Tunis",
-           "Monastir", "Sousse", "Alger", "Oran", "Rome", "Berlin", "Madrid", NA),
-  stringsAsFactors = FALSE
-)
-
 corrVariableDF <- data.frame(
   category=c(rep("Donor metadata",7),
              rep("Protein expression",12),
@@ -76,7 +63,7 @@ continuousVariableList <- list(
                       "Puncta per cell in parietal cortex")
   )
 
-categoryList <- c("Group",
+groupingVariableList <- c("Group (PD/Control)",
                   "Aggression",
                   "Dementia / cognitive impairment",
                   "Depression",
@@ -127,11 +114,11 @@ fluidPage(
       sidebarPanel(width=4,
                    selectInput(inputId="boxplotVar", label="Variable:",
                                choices=continuousVariableList),
-                   selectInput(inputId="boxplotCategory", label="Category:",
-                               choices=categoryList),
+                   selectInput(inputId="boxplotGroup", label="Grouping variable:",
+                               choices=groupingVariableList),
                    ),
       mainPanel(
-        
+        plotOutput('boxplotPlot')
       ),
     )),
     tabPanel("Scatterplot", sidebarLayout(
@@ -140,8 +127,8 @@ fluidPage(
                                choices=continuousVariableList),
                    selectInput(inputId="yVar", label="Y-axis variable:",
                                choices=continuousVariableList),
-                   selectInput(inputId="scatterplotCategory", label="Category:",
-                               choices=categoryList),
+                   selectInput(inputId="scatterplotCategory", label="Grouping variable:",
+                               choices=groupingVariableList),
                    ),
       mainPanel(
         
