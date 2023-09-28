@@ -132,16 +132,6 @@ shinyServer(function(input, output, session) {
     }
   )
   
-  
-  boxplotPlot <- reactive({ggplot(data=datFilt(), aes(x=get(input$boxplotGroup), y=get(input$boxplotVar), fill=get(input$boxplotGroup))) +
-                                    geom_boxplot(outlier.size=5) + scale_fill_brewer(palette="Dark2") + theme_minimal() +
-      theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
-                                            axis.text.x = element_text(size = rel(2.5)),
-                                            axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
-                                            axis.text.y = element_text(size = rel(2.5))) +
-      labs(x=input$boxplotGroup, y=input$boxplotVar)})
-  
-  
   boxplotPlot <- reactive({if(input$boxplotGroup=="None"){
     ggplot(data=datFilt(), aes(y=get(input$boxplotVar))) +
       geom_boxplot(outlier.size=5, fill=brewer.pal(6,"Dark2")[6]) + theme_minimal() +
@@ -161,6 +151,15 @@ shinyServer(function(input, output, session) {
   }})
   
   output$boxplotPlot <- renderPlot({print(boxplotPlot())}, height=600)
+  
+  boxplotDF <- reactive({
+    datFiltNoNA <- na.omit(datFilt(), cols=get(input$boxplotVar))
+    bpDF <- as.data.frame(xtabs(~get(input$boxplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
+    names(bpDF) <- c("Category", "Count")
+    bpDF
+  })
+  
+  output$boxplotDT <- DT::renderDataTable({DT::datatable(boxplotDF(), options = list(info = FALSE, paging = FALSE, searching = FALSE))})
   
   output$downloadBoxplotPDF <- downloadHandler(
     filename = function() { paste("Boxplot of ", input$boxplotVar, " grouped by ", input$boxplotGroup, ".pdf", sep='') },
@@ -208,7 +207,6 @@ shinyServer(function(input, output, session) {
       dev.off()
     }
   )
-  
   
   output$downloadR <- downloadHandler(
     filename = "Spearmans_correlation_coefficient.csv",

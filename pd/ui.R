@@ -117,12 +117,19 @@ fluidPage(
                    selectInput(inputId="boxplotGroup", label="Grouping variable:",
                                choices=groupingVariableList),
                    downloadButton('downloadBoxplotPDF', 'PDF Boxplot'),
-                   downloadButton('downloadBoxplotPNG', 'PNG Boxplot')
+                   downloadButton('downloadBoxplotPNG', 'PNG Boxplot'),
+                   br(),
+                   br(),
+                   br(),
+                   br(),
+                   fluidRow(width=2, DT::dataTableOutput("boxplotDT"))
+                   
                    ),
       mainPanel(
-        plotOutput('boxplotPlot')
+          plotOutput('boxplotPlot')
+        )
       ),
-    )),
+    ),
     tabPanel("Scatterplot", sidebarLayout(
       sidebarPanel(width=4,
                    selectInput(inputId="xVar", label="X-axis variable:",
@@ -131,6 +138,8 @@ fluidPage(
                                choices=continuousVariableList),
                    selectInput(inputId="scatterplotCategory", label="Grouping variable:",
                                choices=groupingVariableList),
+                   downloadButton('downloadScatterplotPDF', 'PDF Scatterplot'),
+                   downloadButton('downloadScatterplotPNG', 'PNG Scatterplot')
                    ),
       mainPanel(
         
