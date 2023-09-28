@@ -116,6 +116,8 @@ fluidPage(
                                choices=continuousVariableList),
                    selectInput(inputId="boxplotGroup", label="Grouping variable:",
                                choices=groupingVariableList),
+                   downloadButton('downloadBoxplotPDF', 'PDF Boxplot'),
+                   downloadButton('downloadBoxplotPNG', 'PNG Boxplot')
                    ),
       mainPanel(
         plotOutput('boxplotPlot')

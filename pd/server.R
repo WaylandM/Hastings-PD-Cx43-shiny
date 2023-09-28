@@ -119,14 +119,14 @@ shinyServer(function(input, output, session) {
   #output$histogram <- renderPlot({print(histInput())})
   
   output$downloadHistPDF <- downloadHandler(
-    filename = function() { paste("histogram ", input$histVar, '.pdf', sep='') },
+    filename = function() { paste("Histogram of ", input$histVar, '.pdf', sep='') },
     content = function(file) {
       ggsave(file, plot = histoPlot(), device = "pdf", units="mm", width=180, height=120)
     }
   )
   
   output$downloadHistPNG <- downloadHandler(
-    filename = function() { paste("histogram ", input$histVar, '.png', sep='') },
+    filename = function() { paste("Histogram of ", input$histVar, '.png', sep='') },
     content = function(file) {
       ggsave(file, plot = histoPlot(), device = "png", bg = 'white', units="mm", width=180, height=120)
     }
@@ -162,6 +162,21 @@ shinyServer(function(input, output, session) {
   
   output$boxplotPlot <- renderPlot({print(boxplotPlot())}, height=600)
   
+  output$downloadBoxplotPDF <- downloadHandler(
+    filename = function() { paste("Boxplot of ", input$boxplotVar, " grouped by ", input$boxplotGroup, ".pdf", sep='') },
+    content = function(file) {
+      ggsave(file, plot = boxplotPlot(), device = "pdf", units="mm", width=180, height=120)
+    }
+  )
+  
+  output$downloadBoxplotPNG <- downloadHandler(
+    filename = function() { paste("Boxplot of ", input$boxplotVar, " grouped by ", input$boxplotGroup, ".png", sep='') },
+    content = function(file) {
+      ggsave(file, plot = boxplotPlot(), device = "png", bg = 'white', units="mm", width=180, height=120)
+    }
+  )
+  
+  
   
   corMatSpearman <- reactive({
     rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
@@ -175,7 +190,7 @@ shinyServer(function(input, output, session) {
   output$corMat <- renderPlot({print(corMatPlot())}, height=600)
   
   output$downloadCorPlotPDF <- downloadHandler(
-    filename = "correlation_plot.pdf",
+    filename = "Correlation_plot.pdf",
     content = function(file) {
       pdf(file, width=10, height=10, title="Correlation Plot")
       cms <- corMatSpearman()
@@ -185,7 +200,7 @@ shinyServer(function(input, output, session) {
   )
   
   output$downloadCorPlotPNG <- downloadHandler(
-    filename = "correlation_plot.png",
+    filename = "Correlation_plot.png",
     content = function(file) {
       png(file, res=1000, units="mm", width=250, height=250)
       corMatSpearman <- rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
