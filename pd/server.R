@@ -153,7 +153,9 @@ shinyServer(function(input, output, session) {
   output$boxplotPlot <- renderPlot({print(boxplotPlot())}, height=600)
   
   boxplotDF <- reactive({
-    datFiltNoNA <- na.omit(datFilt(), cols=get(input$boxplotVar))
+    datFiltNoNA <- datFilt()
+    datFiltNoNA <- datFiltNoNA[eval(parse(text=paste("!is.na(datFiltNoNA$'",input$boxplotVar,"')",sep=""))),]
+    #datFiltNoNA <- na.omit(datFilt(), cols=get(input$boxplotVar))
     bpDF <- as.data.frame(xtabs(~get(input$boxplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
     names(bpDF) <- c("Category", "Count")
     bpDF
