@@ -5,6 +5,7 @@ library(colourpicker)
 library(shinyWidgets)
 library(corrplot)
 library(Hmisc)
+library(RColorBrewer)
 
 dat <- read.csv("data/data.csv", row.names=1)
 dat$Group <- as.factor(dat$Group)
@@ -160,6 +161,20 @@ shinyServer(function(input, output, session) {
     names(bpDF) <- c("Category", "Count")
     bpDF
   })
+  
+  boxplotDF <- reactive({
+    datFiltNoNA <- datFilt()
+    if(input$boxplotGroup=="None"){
+      Category="None"
+      Count=eval(parse(text=paste("sum(!is.na(datFiltNoNA$'", input$boxplotVar,"'))",sep="")))
+      data.frame(cbind(Category, Count))
+    }else{
+      datFiltNoNA <- datFiltNoNA[eval(parse(text=paste("!is.na(datFiltNoNA$'",input$boxplotVar,"')",sep=""))),]
+      bpDF <- as.data.frame(xtabs(~get(input$boxplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
+      names(bpDF) <- c("Category", "Count")
+      bpDF
+      }
+    })
   
   output$boxplotDT <- DT::renderDataTable({DT::datatable(boxplotDF(), options = list(info = FALSE, paging = FALSE, searching = FALSE))})
   

@@ -5,6 +5,7 @@ library(colourpicker)
 library(shinyWidgets)
 library(corrplot)
 library(Hmisc)
+library(RColorBrewer)
 
 corrVariableDF <- data.frame(
   category=c(rep("Donor metadata",7),
