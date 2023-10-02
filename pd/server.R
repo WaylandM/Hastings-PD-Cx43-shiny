@@ -86,10 +86,10 @@ continuousVars <- c("Age (years)",
 
 #function(input, output) {
 shinyServer(function(input, output, session) {
-
+  
   output$mainTable <- DT::renderDataTable({
     DT::datatable(dat, extensions='Buttons', options = list(lengthMenu = c(10, 20, 40), pageLength = 40, dom = 'Bfrtip',
-                                      buttons = c('copy', 'csv', 'excel')), rownames=F, filter="top")
+                                                            buttons = c('copy', 'csv', 'excel')), rownames=F, filter="top")
   })
   
   idxFilt <- reactive({input$mainTable_rows_all})
@@ -103,11 +103,11 @@ shinyServer(function(input, output, session) {
   })
   
   numDonors <- reactive({dim(datFilt())[1]})
-
+  
   output$numDonors<-reactive({paste("Number of donors:", numDonors(), sep=" ")})
   
   histoPlot <- reactive({ggplot(data=datFilt(), aes(x=get(input$histVar))) + 
-                                   geom_histogram(bins=input$histBins, fill=input$histCol) +
+      geom_histogram(bins=input$histBins, fill=input$histCol) +
       theme_minimal() +
       theme(axis.title.x = element_text(size = rel(2)),
             axis.text.x = element_text(size = rel(2.5)),
@@ -117,7 +117,12 @@ shinyServer(function(input, output, session) {
   
   output$histogram <- renderPlot({print(histoPlot())}, height=600)
   
-  #output$histogram <- renderPlot({print(histInput())})
+  numObsHist <- reactive({
+    dFilt <- datFilt()
+    eval(parse(text=paste("sum(!is.na(dFilt$'", input$histVar,"'))",sep="")))
+  })
+  
+  output$numObsHist<-reactive({paste("Number of observations:", numObsHist(), sep=" ")})
   
   output$downloadHistPDF <- downloadHandler(
     filename = function() { paste("Histogram of ", input$histVar, '.pdf', sep='') },
@@ -155,15 +160,6 @@ shinyServer(function(input, output, session) {
   
   boxplotDF <- reactive({
     datFiltNoNA <- datFilt()
-    datFiltNoNA <- datFiltNoNA[eval(parse(text=paste("!is.na(datFiltNoNA$'",input$boxplotVar,"')",sep=""))),]
-    #datFiltNoNA <- na.omit(datFilt(), cols=get(input$boxplotVar))
-    bpDF <- as.data.frame(xtabs(~get(input$boxplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
-    names(bpDF) <- c("Category", "Count")
-    bpDF
-  })
-  
-  boxplotDF <- reactive({
-    datFiltNoNA <- datFilt()
     if(input$boxplotGroup=="None"){
       Category="None"
       Count=eval(parse(text=paste("sum(!is.na(datFiltNoNA$'", input$boxplotVar,"'))",sep="")))
@@ -173,8 +169,8 @@ shinyServer(function(input, output, session) {
       bpDF <- as.data.frame(xtabs(~get(input$boxplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
       names(bpDF) <- c("Category", "Count")
       bpDF
-      }
-    })
+    }
+  })
   
   output$boxplotDT <- DT::renderDataTable({DT::datatable(boxplotDF(), options = list(info = FALSE, paging = FALSE, searching = FALSE))})
   
@@ -192,7 +188,55 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  scatterPlot <- reactive({if(input$scatterplotGroup=="None"){
+    ggplot(data=datFilt(), aes(x=get(input$xVar), y=get(input$yVar))) +
+      geom_point(fill=brewer.pal(6,"Dark2")[6]) + theme_minimal() +
+      theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+                                            axis.text.x = element_text(size = rel(2.5)),
+                                            axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
+                                            axis.text.y = element_text(size = rel(2.5))) +
+      labs(x="", y=input$boxplotVar)
+  }else{
+    ggplot(data=datFilt(), aes(x=get(input$xVar), y=get(input$yVar), fill=get(input$scatterplotGroup))) +
+      geom_point(scale_fill_brewer(palette="Dark2")) + theme_minimal() +
+      theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+                                            axis.text.x = element_text(size = rel(2.5)),
+                                            axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
+                                            axis.text.y = element_text(size = rel(2.5))) +
+      labs(x=input$xVar, y=input$yVar)
+  }})
   
+  output$scatterPlot <- renderPlot({print(scatterplotPlot())}, height=600)
+  
+  scatterplotDF <- reactive({
+    datFiltNoNA <- datFilt()
+    if(input$scatterplotGroup=="None"){
+      Category="None"
+      Count=eval(parse(text=paste("sum(!is.na(datFiltNoNA$'", input$xVar,"'))",sep="")))
+      data.frame(cbind(Category, Count))
+    }else{
+      datFiltNoNA <- datFiltNoNA[eval(parse(text=paste("!is.na(datFiltNoNA$'",input$xVar,"')",sep=""))),]
+      spDF <- as.data.frame(xtabs(~get(input$scatterplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
+      names(bpDF) <- c("Category", "Count")
+      spDF
+    }
+  })
+  
+  output$scatterplotDT <- DT::renderDataTable({DT::datatable(scatterplotDF(), options = list(info = FALSE, paging = FALSE, searching = FALSE))})
+  
+  output$downloadScatterplotPDF <- downloadHandler(
+    filename = function() { paste("Scatterplot of ", input$xVar, " labelled by ", input$boxplotGroup, ".pdf", sep='') },
+    content = function(file) {
+      ggsave(file, plot = scatterPlot(), device = "pdf", units="mm", width=180, height=120)
+    }
+  )
+  
+  output$downloadScatterplotPNG <- downloadHandler(
+    filename = function() { paste("Scatterplot of ", input$xVar, " labelled by ", input$boxplotGroup, ".png", sep='') },
+    content = function(file) {
+      ggsave(file, plot = scatterPlot(), device = "png", bg = 'white', units="mm", width=180, height=120)
+    }
+  )
   
   corMatSpearman <- reactive({
     rcorr(as.matrix(datFilt()[,is.element(names(dat), input[["corMatVars"]])]), type="spearman")
@@ -253,8 +297,8 @@ shinyServer(function(input, output, session) {
   
   
   #observe({
-    #print(input[["corMatVars"]])
-    #print(is.element(names(dat), input[["corMatVars"]]))
+  #print(input[["corMatVars"]])
+  #print(is.element(names(dat), input[["corMatVars"]]))
   #})
   
 }

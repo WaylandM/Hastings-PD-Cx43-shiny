@@ -103,7 +103,10 @@ fluidPage(
         colourInput(inputId = "histCol", label="Select colour", value="slateblue", showColour="both", palette="square", returnName=T),
         sliderInput(inputId = "histBins", label="Number of bins", min=5, max=20, value=10),
         downloadButton('downloadHistPDF', 'PDF Histogram'), 
-        downloadButton('downloadHistPNG', 'PNG Histogram')
+        downloadButton('downloadHistPNG', 'PNG Histogram'),
+        br(),
+        br(),
+        textOutput('numObsHist')
       ),
       mainPanel(
         plotOutput('histogram')
@@ -121,8 +124,6 @@ fluidPage(
                    downloadButton('downloadBoxplotPNG', 'PNG Boxplot'),
                    br(),
                    br(),
-                   br(),
-                   br(),
                    fluidRow(width=2, DT::dataTableOutput("boxplotDT"))
                    
                    ),
@@ -137,13 +138,16 @@ fluidPage(
                                choices=continuousVariableList),
                    selectInput(inputId="yVar", label="Y-axis variable:",
                                choices=continuousVariableList),
-                   selectInput(inputId="scatterplotCategory", label="Grouping variable:",
+                   selectInput(inputId="scatterplotGroup", label="Grouping variable:",
                                choices=groupingVariableList),
                    downloadButton('downloadScatterplotPDF', 'PDF Scatterplot'),
-                   downloadButton('downloadScatterplotPNG', 'PNG Scatterplot')
+                   downloadButton('downloadScatterplotPNG', 'PNG Scatterplot'),
+                   br(),
+                   br(),
+                   fluidRow(DT::dataTableOutput("scatterplotDT"))
                    ),
       mainPanel(
-        
+        plotOutput('scatterPlot')
       ),
     )),
     tabPanel("Correlation Matrix", sidebarLayout(
