@@ -191,22 +191,22 @@ shinyServer(function(input, output, session) {
   scatterPlot <- reactive({if(input$scatterplotGroup=="None"){
     ggplot(data=datFilt(), aes(x=get(input$xVar), y=get(input$yVar))) +
       geom_point(fill=brewer.pal(6,"Dark2")[6]) + theme_minimal() +
-      theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+      theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
                                             axis.text.x = element_text(size = rel(2.5)),
                                             axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
                                             axis.text.y = element_text(size = rel(2.5))) +
       labs(x="", y=input$boxplotVar)
   }else{
-    ggplot(data=datFilt(), aes(x=get(input$xVar), y=get(input$yVar), fill=get(input$scatterplotGroup))) +
-      geom_point(scale_fill_brewer(palette="Dark2")) + theme_minimal() +
-      theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+    ggplot(data=datFilt(), aes(x=get(input$xVar), y=get(input$yVar), color=get(input$scatterplotGroup), shape=get(input$scatterplotGroup))) + 
+      geom_point(size=5) + theme_minimal() + scale_color_brewer(palette="Dark2") + scale_fill_discrete(name = "New Legend Title") +
+      theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
                                             axis.text.x = element_text(size = rel(2.5)),
                                             axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
                                             axis.text.y = element_text(size = rel(2.5))) +
       labs(x=input$xVar, y=input$yVar)
   }})
   
-  output$scatterPlot <- renderPlot({print(scatterplotPlot())}, height=600)
+  output$scatterPlot <- renderPlot({print(scatterPlot())}, height=600)
   
   scatterplotDF <- reactive({
     datFiltNoNA <- datFilt()
@@ -217,7 +217,7 @@ shinyServer(function(input, output, session) {
     }else{
       datFiltNoNA <- datFiltNoNA[eval(parse(text=paste("!is.na(datFiltNoNA$'",input$xVar,"')",sep=""))),]
       spDF <- as.data.frame(xtabs(~get(input$scatterplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
-      names(bpDF) <- c("Category", "Count")
+      names(spDF) <- c("Category", "Count")
       spDF
     }
   })
