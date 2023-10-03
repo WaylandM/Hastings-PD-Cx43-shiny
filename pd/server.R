@@ -198,11 +198,14 @@ shinyServer(function(input, output, session) {
       labs(x="", y=input$boxplotVar)
   }else{
     ggplot(data=datFilt(), aes(x=get(input$xVar), y=get(input$yVar), color=get(input$scatterplotGroup), shape=get(input$scatterplotGroup))) + 
-      geom_point(size=5) + theme_minimal() + scale_color_brewer(palette="Dark2") + scale_fill_discrete(name = "New Legend Title") +
+      geom_point(size=5) + theme_minimal() + scale_color_brewer(palette="Dark2") + 
+      guides(color = guide_legend(title=input$scatterplotGroup), shape=guide_legend(title=input$scatterplotGroup)) +
       theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
                                             axis.text.x = element_text(size = rel(2.5)),
                                             axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
-                                            axis.text.y = element_text(size = rel(2.5))) +
+                                            axis.text.y = element_text(size = rel(2.5)),
+            legend.title = element_text(size=rel(2)),
+            legend.text = element_text(size=rel(2))) +
       labs(x=input$xVar, y=input$yVar)
   }})
   
@@ -227,14 +230,14 @@ shinyServer(function(input, output, session) {
   output$downloadScatterplotPDF <- downloadHandler(
     filename = function() { paste("Scatterplot of ", input$xVar, " labelled by ", input$boxplotGroup, ".pdf", sep='') },
     content = function(file) {
-      ggsave(file, plot = scatterPlot(), device = "pdf", units="mm", width=180, height=120)
+      ggsave(file, plot = scatterPlot(), device = "pdf", units="mm", width=320, height=240)
     }
   )
   
   output$downloadScatterplotPNG <- downloadHandler(
     filename = function() { paste("Scatterplot of ", input$xVar, " labelled by ", input$boxplotGroup, ".png", sep='') },
     content = function(file) {
-      ggsave(file, plot = scatterPlot(), device = "png", bg = 'white', units="mm", width=180, height=120)
+      ggsave(file, plot = scatterPlot(), device = "png", bg = 'white', units="mm", width=320, height=240)
     }
   )
   
