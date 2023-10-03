@@ -138,35 +138,45 @@ shinyServer(function(input, output, session) {
     }
   )
   
-  boxplotPlot <- reactive({if(input$boxplotGroup=="None"){
-    ggplot(data=datFilt(), aes(y=get(input$boxplotVar))) +
-      geom_boxplot(outlier.size=5, fill=brewer.pal(6,"Dark2")[6]) + theme_minimal() +
-      theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
-                                            axis.text.x = element_text(size = rel(2.5)),
-                                            axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
-                                            axis.text.y = element_text(size = rel(2.5))) +
-      labs(x="", y=input$boxplotVar)
-  }else{
-    ggplot(data=datFilt(), aes(x=get(input$boxplotGroup), y=get(input$boxplotVar), fill=get(input$boxplotGroup))) +
-      geom_boxplot(outlier.size=5) + scale_fill_brewer(palette="Dark2") + theme_minimal() +
-      theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
-                                            axis.text.x = element_text(size = rel(2.5)),
-                                            axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
-                                            axis.text.y = element_text(size = rel(2.5))) +
-      labs(x=input$boxplotGroup, y=input$boxplotVar)
+  boxplotPlot <- reactive({
+    dFilt <- datFilt()
+    dFilt <- dFilt[eval(parse(text=paste("!is.na(dFilt$'", input$boxplotVar,"')", sep=""))),]
+    
+    if(input$boxplotGroup=="None"){
+      ggplot(data=dFilt, aes(y=get(input$boxplotVar))) +
+        geom_boxplot(outlier.size=5, fill=brewer.pal(6,"Dark2")[6]) + theme_minimal() +
+        theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+                                              axis.text.x = element_text(size = rel(2.5)),
+                                              axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
+                                              axis.text.y = element_text(size = rel(2.5))) +
+        labs(x="", y=input$boxplotVar)
+      }else{
+        dFilt <- dFilt[eval(parse(text=paste("!is.na(dFilt$'", input$boxplotGroup,"')", sep=""))),]
+        ggplot(data=dFilt, aes(x=get(input$boxplotGroup), y=get(input$boxplotVar), fill=get(input$boxplotGroup))) +
+          geom_boxplot(outlier.size=5) + scale_fill_brewer(palette="Dark2") + theme_minimal() +
+          theme(legend.position="none") + theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+                                                axis.text.x = element_text(size = rel(2.5)),
+                                                axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
+                                                axis.text.y = element_text(size = rel(2.5))) +
+          labs(x=input$boxplotGroup, y=input$boxplotVar)
   }})
   
   output$boxplotPlot <- renderPlot({print(boxplotPlot())}, height=600)
   
   boxplotDF <- reactive({
-    datFiltNoNA <- datFilt()
+    dFilt <- datFilt()
+    dFilt <- dFilt[eval(parse(text=paste("!is.na(dFilt$'", input$boxplotVar,"')", sep=""))),]
+    
     if(input$boxplotGroup=="None"){
       Category="None"
-      Count=eval(parse(text=paste("sum(!is.na(datFiltNoNA$'", input$boxplotVar,"'))",sep="")))
+      #Count=eval(parse(text=paste("sum(!is.na(datFiltNoNA$'", input$boxplotVar,"'))",sep="")))
+      Count=dim(dFilt)[1]
       data.frame(cbind(Category, Count))
     }else{
-      datFiltNoNA <- datFiltNoNA[eval(parse(text=paste("!is.na(datFiltNoNA$'",input$boxplotVar,"')",sep=""))),]
-      bpDF <- as.data.frame(xtabs(~get(input$boxplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
+      dFilt <- dFilt[eval(parse(text=paste("!is.na(dFilt$'", input$boxplotGroup,"')", sep=""))),]
+      #datFiltNoNA <- datFiltNoNA[eval(parse(text=paste("!is.na(datFiltNoNA$'",input$boxplotVar,"')",sep=""))),]
+      #bpDF <- as.data.frame(xtabs(~get(input$boxplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
+      bpDF <- as.data.frame(xtabs(~get(input$boxplotGroup), dFilt))
       names(bpDF) <- c("Category", "Count")
       bpDF
     }
@@ -177,37 +187,42 @@ shinyServer(function(input, output, session) {
   output$downloadBoxplotPDF <- downloadHandler(
     filename = function() { paste("Boxplot of ", input$boxplotVar, " grouped by ", input$boxplotGroup, ".pdf", sep='') },
     content = function(file) {
-      ggsave(file, plot = boxplotPlot(), device = "pdf", units="mm", width=180, height=120)
+      ggsave(file, plot = boxplotPlot(), device = "pdf", units="mm", width=320, height=240)
     }
   )
   
   output$downloadBoxplotPNG <- downloadHandler(
     filename = function() { paste("Boxplot of ", input$boxplotVar, " grouped by ", input$boxplotGroup, ".png", sep='') },
     content = function(file) {
-      ggsave(file, plot = boxplotPlot(), device = "png", bg = 'white', units="mm", width=180, height=120)
+      ggsave(file, plot = boxplotPlot(), device = "png", bg = 'white', units="mm", width=320, height=240)
     }
   )
   
-  scatterPlot <- reactive({if(input$scatterplotGroup=="None"){
-    ggplot(data=datFilt(), aes(x=get(input$xVar), y=get(input$yVar))) +
-      geom_point(fill=brewer.pal(6,"Dark2")[6]) + theme_minimal() +
-      theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
-                                            axis.text.x = element_text(size = rel(2.5)),
-                                            axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
-                                            axis.text.y = element_text(size = rel(2.5))) +
-      labs(x="", y=input$boxplotVar)
-  }else{
-    ggplot(data=datFilt(), aes(x=get(input$xVar), y=get(input$yVar), color=get(input$scatterplotGroup), shape=get(input$scatterplotGroup))) + 
-      geom_point(size=5) + theme_minimal() + scale_color_brewer(palette="Dark2") + 
-      guides(color = guide_legend(title=input$scatterplotGroup), shape=guide_legend(title=input$scatterplotGroup)) +
-      theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
-                                            axis.text.x = element_text(size = rel(2.5)),
-                                            axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
-                                            axis.text.y = element_text(size = rel(2.5)),
-            legend.title = element_text(size=rel(2)),
-            legend.text = element_text(size=rel(2))) +
-      labs(x=input$xVar, y=input$yVar)
-  }})
+  scatterPlot <- reactive({
+    dFilt <- datFilt()
+    dFilt <- dFilt[eval(parse(text=paste("!is.na(dFilt$'", input$xVar,"') & !is.na(dFilt$'", input$yVar, "')", sep=""))),]
+    
+    if(input$scatterplotGroup=="None"){
+      ggplot(data=dFilt, aes(x=get(input$xVar), y=get(input$yVar))) +
+        geom_point(fill=brewer.pal(6,"Dark2")[6]) + theme_minimal() +
+        theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+              axis.text.x = element_text(size = rel(2.5)),
+              axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
+              axis.text.y = element_text(size = rel(2.5))) +
+        labs(x=input$xVar, y=input$yVar)
+      }else{
+        dFilt <- dFilt[eval(parse(text=paste("!is.na(dFilt$'", input$scatterplotGroup,"')", sep=""))),]
+        ggplot(data=dFilt, aes(x=get(input$xVar), y=get(input$yVar), color=get(input$scatterplotGroup), shape=get(input$scatterplotGroup))) + 
+          geom_point(size=5) + theme_minimal() + scale_color_brewer(palette="Dark2") + 
+          guides(color = guide_legend(title=input$scatterplotGroup), shape=guide_legend(title=input$scatterplotGroup)) +
+          theme(axis.title.x = element_text(size = rel(2), margin = margin(t = 20, r = 0, b = 0, l = 0)),
+                axis.text.x = element_text(size = rel(2.5)),
+                axis.title.y = element_text(size = rel(2), margin = margin(t = 0, r = 20, b = 0, l = 0)),
+                axis.text.y = element_text(size = rel(2.5)),
+                legend.title = element_text(size=rel(2)),
+                legend.text = element_text(size=rel(2))) +
+          labs(x=input$xVar, y=input$yVar)
+        }})
   
   output$scatterPlot <- renderPlot({print(scatterPlot())}, height=600)
   
