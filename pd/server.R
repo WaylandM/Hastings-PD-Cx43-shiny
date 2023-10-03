@@ -227,14 +227,16 @@ shinyServer(function(input, output, session) {
   output$scatterPlot <- renderPlot({print(scatterPlot())}, height=600)
   
   scatterplotDF <- reactive({
-    datFiltNoNA <- datFilt()
+    dFilt <- datFilt()
+    dFilt <- dFilt[eval(parse(text=paste("!is.na(dFilt$'", input$xVar,"') & !is.na(dFilt$'", input$yVar, "')", sep=""))),]
+    
     if(input$scatterplotGroup=="None"){
       Category="None"
-      Count=eval(parse(text=paste("sum(!is.na(datFiltNoNA$'", input$xVar,"'))",sep="")))
+      Count=dim(dFilt)[1]
       data.frame(cbind(Category, Count))
     }else{
-      datFiltNoNA <- datFiltNoNA[eval(parse(text=paste("!is.na(datFiltNoNA$'",input$xVar,"')",sep=""))),]
-      spDF <- as.data.frame(xtabs(~get(input$scatterplotGroup), datFiltNoNA, addNA=T, na.action = NULL))
+      dFilt <- dFilt[eval(parse(text=paste("!is.na(dFilt$'", input$scatterplotGroup,"')", sep=""))),]
+      spDF <- as.data.frame(xtabs(~get(input$scatterplotGroup), dFilt))
       names(spDF) <- c("Category", "Count")
       spDF
     }
