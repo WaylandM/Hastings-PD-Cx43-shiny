@@ -245,14 +245,14 @@ shinyServer(function(input, output, session) {
   output$scatterplotDT <- DT::renderDataTable({DT::datatable(scatterplotDF(), options = list(info = FALSE, paging = FALSE, searching = FALSE))})
   
   output$downloadScatterplotPDF <- downloadHandler(
-    filename = function() { paste("Scatterplot of ", input$xVar, " labelled by ", input$boxplotGroup, ".pdf", sep='') },
+    filename = function() { paste("Scatterplot of ", input$xVar, " vs ", input$yVar, " labelled by ", input$scatterplotGroup, ".pdf", sep='') },
     content = function(file) {
       ggsave(file, plot = scatterPlot(), device = "pdf", units="mm", width=320, height=240)
     }
   )
   
   output$downloadScatterplotPNG <- downloadHandler(
-    filename = function() { paste("Scatterplot of ", input$xVar, " labelled by ", input$boxplotGroup, ".png", sep='') },
+    filename = function() { paste("Scatterplot of ", input$xVar, " vs ", input$yVar,  " labelled by ", input$scatterplotGroup, ".png", sep='') },
     content = function(file) {
       ggsave(file, plot = scatterPlot(), device = "png", bg = 'white', units="mm", width=320, height=240)
     }
