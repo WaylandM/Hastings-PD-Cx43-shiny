@@ -94,12 +94,16 @@ shinyServer(function(input, output, session) {
   
   idxFilt <- reactive({input$mainTable_rows_all})
   
+  firstFilter = new.env()
+  firstFilter$i = 0
   datFilt <- reactive({
-    if (is.null(idxFilt())){
+    if (is.null(idxFilt()) & firstFilter$i<1){
       datFilt <- dat
     } else {
       datFilt <- dat[idxFilt(),]
     }
+    firstFilter$i = firstFilter$i+1
+    return(datFilt)
   })
   
   numDonors <- reactive({dim(datFilt())[1]})
@@ -252,7 +256,7 @@ shinyServer(function(input, output, session) {
   )
   
   output$downloadScatterplotPNG <- downloadHandler(
-    filename = function() { paste("Scatterplot of ", input$xVar, " vs ", input$yVar,  " labelled by ", input$scatterplotGroup, ".png", sep='') },
+    filename = function() { paste("Scatterplot of ", input$xVar, " vs ", input$yVar, " labelled by ", input$scatterplotGroup, ".png", sep='') },
     content = function(file) {
       ggsave(file, plot = scatterPlot(), device = "png", bg = 'white', units="mm", width=320, height=240)
     }
