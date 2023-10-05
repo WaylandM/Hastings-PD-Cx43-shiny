@@ -94,6 +94,8 @@ shinyServer(function(input, output, session) {
   
   idxFilt <- reactive({input$mainTable_rows_all})
   
+  # firstFilter$i is an index to keep track of the number of times datFilt is called
+  # we create a new environment to pass firstFilter by reference rather than value
   firstFilter = new.env()
   firstFilter$i = 0
   datFilt <- reactive({
