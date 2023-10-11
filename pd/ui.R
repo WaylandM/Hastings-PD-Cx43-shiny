@@ -76,6 +76,7 @@ groupingVariableList <- c("Group (PD/Control)",
                   "Sleep disturbance",
                   "None"
                   )
+# https://shiny.posit.co/r/articles/build/tag-glossary/
 
 fluidPage(
   title = "Neuropathology of Parkinson's patients vs controls.",
@@ -83,6 +84,7 @@ fluidPage(
   tabsetPanel(
     id = 'dataset',
     tabPanel("About", p("p creates a paragraph of text."),
+             h1("heading"),
              p("A new p() command starts a new paragraph. Supply a style attribute to change the format of the entire paragraph.", style = "font-family: 'times'; font-si16pt"),
              strong("strong() makes bold text."),
              em("em() creates italicized (i.e, emphasized) text."),
