@@ -41,47 +41,47 @@ names(dat)[16] <- "Substantia nigra depigmentation"
 names(dat)[17] <- "Tau pathology"
 names(dat)[18] <- "Vessel disease / cerebral amyloid angiopathy"
 
-names(dat)[19] <- "ALdh1L1 expression in substantia nigra"
+names(dat)[19] <- "ALdh1L1 expression in midbrain SN" # substantia nigra
 names(dat)[20] <- "Aldh1L1 expression in parietal cortex"
-names(dat)[21] <- "Aldh1l1 expression in striatum of basal ganglia"
-names(dat)[22] <- "Cx43 expression in substantia nigra"
+names(dat)[21] <- "Aldh1l1 expression in striatum" # striatum of basal ganglia
+names(dat)[22] <- "Cx43 expression in midbrain SN" # substantia nigra
 names(dat)[23] <- "Cx43 expression in parietal cortex"
-names(dat)[24] <- "Cx43 expression in striatum of basal ganglia"
-names(dat)[25] <- "GDNF expression in substantia nigra"
+names(dat)[24] <- "Cx43 expression in striatum" # striatum of basal ganglia
+names(dat)[25] <- "GDNF expression in midbrain SN" # substantia nigra
 names(dat)[26] <- "GDNF expression in parietal cortex"
-names(dat)[27] <- "GDNF expression in striatum of basal ganglia"
-names(dat)[28] <- "GFAP expression in substantia nigra"
+names(dat)[27] <- "GDNF expression in striatum" # striatum of basal ganglia
+names(dat)[28] <- "GFAP expression in midbrain SN" # substantia nigra
 names(dat)[29] <- "GFAP expression in parietal cortex"
-names(dat)[30] <- "GFAP expression in striatum of basal ganglia"
+names(dat)[30] <- "GFAP expression in striatum" # striatum of basal ganglia
 
-names(dat)[31] <- "Puncta per cell in caudate nucleus of basal ganglia"
-names(dat)[32] <- "Puncta per cell in globus pallidus of basal ganglia"
-names(dat)[33] <- "Puncta per cell in putamen of basal ganglia"
+names(dat)[31] <- "Puncta per cell in caudate" # caudate nucleus of basal ganglia
+names(dat)[32] <- "Puncta per cell in globus pallidus" # globus pallidus of basal ganglia
+names(dat)[33] <- "Puncta per cell in putamen" # putamen of basal ganglia
 names(dat)[34] <- "Puncta per cell in frontal cortex"
 names(dat)[35] <- "Puncta per cell in insular cortex"
-names(dat)[36] <- "Puncta per cell in substantia nigra"
+names(dat)[36] <- "Puncta per cell in midbrain SN" # substantia nigra
 names(dat)[37] <- "Puncta per cell in parietal cortex"
 
 continuousVars <- c("Age (years)", 
                     "PD duration (years)", 
-                    "ALdh1L1 expression in substantia nigra",
+                    "ALdh1L1 expression in midbrain SN", # substantia nigra
                     "Aldh1L1 expression in parietal cortex",
-                    "Aldh1l1 expression in striatum of basal ganglia",
-                    "Cx43 expression in substantia nigra",
+                    "Aldh1l1 expression in striatum", # striatum of basal ganglia
+                    "Cx43 expression in midbrain SN", # substantia nigra
                     "Cx43 expression in parietal cortex",
-                    "Cx43 expression in striatum of basal ganglia",
-                    "GDNF expression in substantia nigra",
+                    "Cx43 expression in striatum of basal ganglia", # striatum of basal ganglia
+                    "GDNF expression in midbrain SN", # substantia nigra
                     "GDNF expression in parietal cortex",
-                    "GDNF expression in striatum of basal ganglia",
-                    "GFAP expression in substantia nigra",
+                    "GDNF expression in striatum", # striatum of basal ganglia
+                    "GFAP expression in midbrain SN", # substantia nigra
                     "GFAP expression in parietal cortex",
-                    "GFAP expression in striatum of basal ganglia",
-                    "Puncta per cell in caudate nucleus of basal ganglia",
-                    "Puncta per cell in globus pallidus of basal ganglia",
-                    "Puncta per cell in putamen of basal ganglia",
+                    "GFAP expression in striatum", # striatum of basal ganglia
+                    "Puncta per cell in caudate", # caudate nucleus of basal ganglia
+                    "Puncta per cell in globus pallidus", # globus pallidus of basal ganglia
+                    "Puncta per cell in putamen", # putamen of basal ganglia
                     "Puncta per cell in frontal cortex",
                     "Puncta per cell in insular cortex",
-                    "Puncta per cell in substantia nigra",
+                    "Puncta per cell in midbrain SN", # substantia nigra
                     "Puncta per cell in parietal cortex")
 
 #function(input, output) {
@@ -320,7 +320,16 @@ shinyServer(function(input, output, session) {
   )
   
   
-  
+  output$brainImage <- renderImage({
+    # When input$n is 3, filename is ./images/image3.jpeg
+    #filename <- normalizePath(file.path('./images', paste('image', input$n, '.jpeg', sep='')))
+    imgFilename = "images/brain_scheme_PD.png"
+    
+    # Return a list containing the filename and alt text
+    list(src = imgFilename,
+         alt = "Brain regions studied")
+    
+  }, deleteFile = FALSE)
   
   #observe({
   #print(input[["corMatVars"]])

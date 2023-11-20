@@ -18,24 +18,24 @@ corrVariableDF <- data.frame(
              "Substantia nigra depigmentation",
              "Tau pathology",
              "Vessel disease / cerebral amyloid angiopathy",
-             "ALdh1L1 expression in substantia nigra",
+             "ALdh1L1 expression in midbrain SN", # substantia nigra
              "Aldh1L1 expression in parietal cortex",
-             "Aldh1l1 expression in striatum of basal ganglia",
-             "Cx43 expression in substantia nigra",
+             "Aldh1l1 expression in striatum", # striatum of basal ganglia
+             "Cx43 expression in midbrain SN", # substantia nigra
              "Cx43 expression in parietal cortex",
-             "Cx43 expression in striatum of basal ganglia",
-             "GDNF expression in substantia nigra",
+             "Cx43 expression in striatum", # striatum of basal ganglia
+             "GDNF expression in midbrain SN", # substantia nigra
              "GDNF expression in parietal cortex",
-             "GDNF expression in striatum of basal ganglia",
-             "GFAP expression in substantia nigra",
+             "GDNF expression in striatum", # striatum of basal ganglia
+             "GFAP expression in midbrain SN", # substantia nigra
              "GFAP expression in parietal cortex",
-             "GFAP expression in striatum of basal ganglia",
-             "Puncta per cell in caudate nucleus of basal ganglia",
-             "Puncta per cell in globus pallidus of basal ganglia",
-             "Puncta per cell in putamen of basal ganglia",
+             "GFAP expression in striatum", # striatum of basal ganglia
+             "Puncta per cell in caudate", # caudate nucleus of basal ganglia
+             "Puncta per cell in globus pallidus", # globus pallidus of basal ganglia
+             "Puncta per cell in putamen", # putamen of basal ganglia
              "Puncta per cell in frontal cortex",
              "Puncta per cell in insular cortex",
-             "Puncta per cell in substantia nigra",
+             "Puncta per cell in midbrain SN", # substantia nigra
              "Puncta per cell in parietal cortex"),
   stringsAsFactors = FALSE
 )
@@ -43,24 +43,24 @@ corrVariableDF <- data.frame(
 continuousVariableList <- list(
   "Donor metadata"=c("Age (years)", 
                      "PD duration (years)"),
-  "Protein expression"=c("ALdh1L1 expression in substantia nigra",
+  "Protein expression"=c("ALdh1L1 expression in midbrain SN", # substantia nigra
                          "Aldh1L1 expression in parietal cortex",
-                         "Aldh1l1 expression in striatum of basal ganglia",
-                         "Cx43 expression in substantia nigra",
+                         "Aldh1l1 expression in striatum", # striatum of basal ganglia
+                         "Cx43 expression in midbrain SN", # substantia nigra
                          "Cx43 expression in parietal cortex",
-                         "Cx43 expression in striatum of basal ganglia",
-                         "GDNF expression in substantia nigra",
+                         "Cx43 expression in striatum", # striatum of basal ganglia
+                         "GDNF expression in midbrain SN", # substantia nigra
                          "GDNF expression in parietal cortex",
-                         "GDNF expression in striatum of basal ganglia",
-                         "GFAP expression in substantia nigra",
+                         "GDNF expression in striatum", # striatum of basal ganglia
+                         "GFAP expression in midbrain SN", # substantia nigra
                          "GFAP expression in parietal cortex",
-                         "GFAP expression in striatum of basal ganglia"),
-  "Puncta per cell"=c("Puncta per cell in caudate nucleus of basal ganglia",
-                      "Puncta per cell in globus pallidus of basal ganglia",
-                      "Puncta per cell in putamen of basal ganglia",
+                         "GFAP expression in striatum"), # striatum of basal ganglia
+  "Puncta per cell"=c("Puncta per cell in caudate", # caudate nucleus of basal ganglia
+                      "Puncta per cell in globus pallidus", # globus pallidus of basal ganglia
+                      "Puncta per cell in putamen", # putamen of basal ganglia
                       "Puncta per cell in frontal cortex",
                       "Puncta per cell in insular cortex",
-                      "Puncta per cell in substantia nigra",
+                      "Puncta per cell in midbrain SN", # substantia nigra
                       "Puncta per cell in parietal cortex")
   )
 
@@ -79,12 +79,16 @@ groupingVariableList <- c("Group (PD/Control)",
 # https://shiny.posit.co/r/articles/build/tag-glossary/
 
 fluidPage(
-  title = "Neuropathology of Parkinson's patients vs controls.",
-  titlePanel("Neuropathology of Parkinson's disease"),
+  title = "Connexin 43 pathology in late-stage human Parkinson's brains.",
+  titlePanel("Connexin 43 pathology in late-stage human Parkinson's brains."),
   tabsetPanel(
     id = 'dataset',
-    tabPanel("About", p("p creates a paragraph of text."),
-             h1("heading"),
+    tabPanel("About", 
+             h3("Introduction"),
+             p("Parkinson's (PD) is a complex condition in which multiple cell types and protein pathways are involved. Degeneration of dopaminergic neurones in the midbrains is well-described, but we as well as others discovered profound alterations in structure and function of brain cells called astrocytes. Importantly, PD-related changes can be found in multiple regions of the brain. In the present study, we looked in-depth at the network connectivity of astrocytes mediated via connexin 43 (Cx43) protein in several key brain regions."),
+             p('Cx43 pathway is complex where this protein can exist in "protective" structures linking astrocytes in a network called gap junctions (GJs) or "disease-associated" unopposed channels called hemichannels (HCs) which open the intracellular environment to the extracellular space. This can disturb the intracellular calcium balance and cell signalling, and also trigger inflammasome activation and the release of pro-inflammatory mediators, thus affecting bystander cell types such as dopaminergic neurones.'),
+             p('Our study shows profound changes in Cx43, especially in the punctate staining associated with GJs, in several brain regions - prominently in the cerebral cortex, which has been less studies in the context of PD than the midbrain. The interactive resource allows the user to explore various correlations between this new side of PD pathology and selected disease characteristics as well as non-motor PD symptoms.'),
+             imageOutput("brainImage"),
              p("A new p() command starts a new paragraph. Supply a style attribute to change the format of the entire paragraph.", style = "font-family: 'times'; font-si16pt"),
              strong("strong() makes bold text."),
              em("em() creates italicized (i.e, emphasized) text."),
