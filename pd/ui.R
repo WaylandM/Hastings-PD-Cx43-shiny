@@ -91,10 +91,9 @@ fluidPage(
              imageOutput("brainImage"),
              h3("How to use this resource"),
              tags$ol(
-               tags$li("First list item"), 
-               tags$li("Second list item"), 
-               tags$li("Third list item")
-             ),
+               tags$li("A table of data for all 40 donors is displayed on the", tags$b('Select Donors'), "tab. A filter tool at the top of each column facilitates selection of donors based on the value of any variable or combination of variables."), 
+               tags$li("Tools for visualizing the selected data can be found on the ", tags$b('Histogram, Boxplot, Scatterplot'), " and ", tags$b('Correlation Matrix'), " tabs."), 
+             )
              ),
     tabPanel("Select donors", DT::dataTableOutput("mainTable")),
     tabPanel("Histogram", sidebarLayout(
