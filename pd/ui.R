@@ -9,7 +9,7 @@ library(RColorBrewer)
 
 corrVariableDF <- data.frame(
   category=c(rep("Donor metadata",7),
-             rep("Protein expression",12),
+             rep("Protein expression",13),
              rep("Puncta per cell", 7)),
   variable=c("Age (years)",
              "Amyloid pathology",
@@ -30,6 +30,7 @@ corrVariableDF <- data.frame(
              "GFAP expression in midbrain SN", # substantia nigra
              "GFAP expression in parietal cortex",
              "GFAP expression in striatum", # striatum of basal ganglia
+             "Iba1 expression in parietal cortex",
              "Puncta per cell in caudate", # caudate nucleus of basal ganglia
              "Puncta per cell in globus pallidus", # globus pallidus of basal ganglia
              "Puncta per cell in putamen", # putamen of basal ganglia
@@ -54,7 +55,8 @@ continuousVariableList <- list(
                          "GDNF expression in striatum", # striatum of basal ganglia
                          "GFAP expression in midbrain SN", # substantia nigra
                          "GFAP expression in parietal cortex",
-                         "GFAP expression in striatum"), # striatum of basal ganglia
+                         "GFAP expression in striatum", # striatum of basal ganglia
+                         "Iba1 expression in parietal cortex"), 
   "Puncta per cell"=c("Puncta per cell in caudate", # caudate nucleus of basal ganglia
                       "Puncta per cell in globus pallidus", # globus pallidus of basal ganglia
                       "Puncta per cell in putamen", # putamen of basal ganglia
@@ -86,9 +88,10 @@ fluidPage(
     tabPanel("About", 
              h3("Introduction"),
              p("Parkinson's (PD) is a complex condition in which multiple cell types and protein pathways are involved. Degeneration of dopaminergic neurones in the midbrains is well-described, but we as well as others discovered profound alterations in structure and function of brain cells called astrocytes. Importantly, PD-related changes can be found in multiple regions of the brain. In the present study, we looked in-depth at the network connectivity of astrocytes mediated via connexin 43 (Cx43) protein in several key brain regions."),
+             imageOutput("brainImage", inline=T),
              p('Cx43 pathway is complex where this protein can exist in "protective" structures linking astrocytes in a network called gap junctions (GJs) or "disease-associated" unopposed channels called hemichannels (HCs) which open the intracellular environment to the extracellular space. This can disturb the intracellular calcium balance and cell signalling, and also trigger inflammasome activation and the release of pro-inflammatory mediators, thus affecting bystander cell types such as dopaminergic neurones.'),
              p('Our study shows profound changes in Cx43, especially in the punctate staining associated with GJs, in several brain regions - prominently in the cerebral cortex, which has been less studies in the context of PD than the midbrain. The interactive resource allows the user to explore various correlations between this new side of PD pathology and selected disease characteristics as well as non-motor PD symptoms.'),
-             imageOutput("brainImage"),
+             imageOutput("summaryImage", inline=T),
              h3("How to use this resource"),
              tags$ol(
                tags$li("A table of data for all 40 donors is displayed on the", tags$b('Select Donors'), "tab. A filter tool at the top of each column facilitates selection of donors based on the value of any variable or combination of variables."), 

@@ -1,12 +1,13 @@
 name: Connexin_43_pathology_in_late-stage_human_Parkinsons_brains
 title: Connexin_43_pathology_in_late-stage_human_Parkinsons_brains
-username: wayland
-account: wayland
+username: hastings
+account: hastings
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 10653780
-bundleId: 7980486
-url: https://wayland.shinyapps.io/Connexin_43_pathology_in_late-stage_human_Parkinsons_brains/
+appId: 10710451
+bundleId: 8145402
+url: https://hastings.shinyapps.io/Connexin_43_pathology_in_late-stage_human_Parkinsons_brains/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: data/data original.csv

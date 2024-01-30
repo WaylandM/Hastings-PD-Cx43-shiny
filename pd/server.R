@@ -27,7 +27,9 @@ dat$PD.duration <- as.numeric(dat$PD.duration)
 dat$Gender <- as.factor(dat$Gender)
 
 names(dat)[1] <- "Group (PD/Control)"
-names(dat)[2] <- "Brain Bank ID"
+#names(dat)[2] <- "Brain Bank ID"
+names(dat)[2] <- "ID"
+dat$ID <- row.names(dat)
 names(dat)[3] <- "Age (years)"
 names(dat)[5] <- "Amyloid pathology"
 names(dat)[6] <- "Dementia / cognitive impairment"
@@ -53,14 +55,15 @@ names(dat)[27] <- "GDNF expression in striatum" # striatum of basal ganglia
 names(dat)[28] <- "GFAP expression in midbrain SN" # substantia nigra
 names(dat)[29] <- "GFAP expression in parietal cortex"
 names(dat)[30] <- "GFAP expression in striatum" # striatum of basal ganglia
+names(dat)[31] <- "Iba1 expression in parietal cortex"
 
-names(dat)[31] <- "Puncta per cell in caudate" # caudate nucleus of basal ganglia
-names(dat)[32] <- "Puncta per cell in globus pallidus" # globus pallidus of basal ganglia
-names(dat)[33] <- "Puncta per cell in putamen" # putamen of basal ganglia
-names(dat)[34] <- "Puncta per cell in frontal cortex"
-names(dat)[35] <- "Puncta per cell in insular cortex"
-names(dat)[36] <- "Puncta per cell in midbrain SN" # substantia nigra
-names(dat)[37] <- "Puncta per cell in parietal cortex"
+names(dat)[32] <- "Puncta per cell in caudate" # caudate nucleus of basal ganglia
+names(dat)[33] <- "Puncta per cell in globus pallidus" # globus pallidus of basal ganglia
+names(dat)[34] <- "Puncta per cell in putamen" # putamen of basal ganglia
+names(dat)[35] <- "Puncta per cell in frontal cortex"
+names(dat)[36] <- "Puncta per cell in insular cortex"
+names(dat)[37] <- "Puncta per cell in midbrain SN" # substantia nigra
+names(dat)[38] <- "Puncta per cell in parietal cortex"
 
 continuousVars <- c("Age (years)", 
                     "PD duration (years)", 
@@ -76,6 +79,7 @@ continuousVars <- c("Age (years)",
                     "GFAP expression in midbrain SN", # substantia nigra
                     "GFAP expression in parietal cortex",
                     "GFAP expression in striatum", # striatum of basal ganglia
+                    "Iba1 expression in parietal cortex",
                     "Puncta per cell in caudate", # caudate nucleus of basal ganglia
                     "Puncta per cell in globus pallidus", # globus pallidus of basal ganglia
                     "Puncta per cell in putamen", # putamen of basal ganglia
@@ -324,6 +328,18 @@ shinyServer(function(input, output, session) {
     # When input$n is 3, filename is ./images/image3.jpeg
     #filename <- normalizePath(file.path('./images', paste('image', input$n, '.jpeg', sep='')))
     imgFilename = "images/brain_scheme_PD.png"
+    
+    # Return a list containing the filename and alt text
+    list(src = imgFilename,
+         alt = "Brain regions studied")
+    
+  }, deleteFile = FALSE)
+  
+  
+  output$summaryImage <- renderImage({
+    # When input$n is 3, filename is ./images/image3.jpeg
+    #filename <- normalizePath(file.path('./images', paste('image', input$n, '.jpeg', sep='')))
+    imgFilename = "images/Cx43_in_PD_summary_small.png"
     
     # Return a list containing the filename and alt text
     list(src = imgFilename,
