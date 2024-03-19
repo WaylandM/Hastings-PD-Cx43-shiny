@@ -9,24 +9,21 @@ library(RColorBrewer)
 
 corrVariableDF <- data.frame(
   category=c(rep("Donor metadata",7),
-             rep("Protein expression",13),
+             rep("Protein expression",10),
              rep("Puncta per cell", 7)),
   variable=c("Age (years)",
-             "Amyloid pathology",
-             "LB Braak stage",
+             "Amyloid Braak",
+             "LB / a-syn Braak",
              "PD duration (years)",
              "Substantia nigra depigmentation",
-             "Tau pathology",
-             "Vessel disease / cerebral amyloid angiopathy",
+             "Tau Braak",
+             "CAA",
              "ALdh1L1 expression in midbrain SN", # substantia nigra
              "Aldh1L1 expression in parietal cortex",
              "Aldh1l1 expression in striatum", # striatum of basal ganglia
              "Cx43 expression in midbrain SN", # substantia nigra
              "Cx43 expression in parietal cortex",
              "Cx43 expression in striatum", # striatum of basal ganglia
-             "GDNF expression in midbrain SN", # substantia nigra
-             "GDNF expression in parietal cortex",
-             "GDNF expression in striatum", # striatum of basal ganglia
              "GFAP expression in midbrain SN", # substantia nigra
              "GFAP expression in parietal cortex",
              "GFAP expression in striatum", # striatum of basal ganglia
@@ -50,9 +47,6 @@ continuousVariableList <- list(
                          "Cx43 expression in midbrain SN", # substantia nigra
                          "Cx43 expression in parietal cortex",
                          "Cx43 expression in striatum", # striatum of basal ganglia
-                         "GDNF expression in midbrain SN", # substantia nigra
-                         "GDNF expression in parietal cortex",
-                         "GDNF expression in striatum", # striatum of basal ganglia
                          "GFAP expression in midbrain SN", # substantia nigra
                          "GFAP expression in parietal cortex",
                          "GFAP expression in striatum", # striatum of basal ganglia

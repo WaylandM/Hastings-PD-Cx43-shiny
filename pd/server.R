@@ -26,44 +26,46 @@ dat$Age <- as.numeric(dat$Age)
 dat$PD.duration <- as.numeric(dat$PD.duration)
 dat$Gender <- as.factor(dat$Gender)
 
+dat$GDNF.MidSN <- NULL
+dat$GDNF.ParCort <- NULL
+dat$GDNF.StriBG <- NULL
+
 names(dat)[1] <- "Group (PD/Control)"
-#names(dat)[2] <- "Brain Bank ID"
 names(dat)[2] <- "ID"
-dat$ID <- row.names(dat)
-names(dat)[3] <- "Age (years)"
-names(dat)[5] <- "Amyloid pathology"
-names(dat)[6] <- "Dementia / cognitive impairment"
-names(dat)[10] <- "LB Braak stage"
-names(dat)[11] <- "LB disease type"
-names(dat)[12] <- "Memory problems"
-names(dat)[13] <- "PD duration (years)"
-names(dat)[14] <- "Psychotic symptoms"
-names(dat)[15] <- "Sleep disturbance"
-names(dat)[16] <- "Substantia nigra depigmentation"
-names(dat)[17] <- "Tau pathology"
-names(dat)[18] <- "Vessel disease / cerebral amyloid angiopathy"
+names(dat)[3] <- "Brain Bank ID"
+names(dat)[4] <- "Age (years)"
+# 5: Aggression (doesn't need renaming)
+names(dat)[6] <- "Amyloid Braak"
+names(dat)[7] <- "Dementia / cognitive impairment"
+# 8-10: Depression, Gender, Hallucinations
+names(dat)[11] <- "LB / a-syn Braak"
+names(dat)[12] <- "LB disease type"
+names(dat)[13] <- "Memory problems"
+names(dat)[14] <- "PD duration (years)"
+names(dat)[15] <- "Psychotic symptoms"
+names(dat)[16] <- "Sleep disturbance"
+names(dat)[17] <- "Substantia nigra depigmentation"
+names(dat)[18] <- "Tau Braak"
+names(dat)[19] <- "CAA"
 
-names(dat)[19] <- "ALdh1L1 expression in midbrain SN" # substantia nigra
-names(dat)[20] <- "Aldh1L1 expression in parietal cortex"
-names(dat)[21] <- "Aldh1l1 expression in striatum" # striatum of basal ganglia
-names(dat)[22] <- "Cx43 expression in midbrain SN" # substantia nigra
-names(dat)[23] <- "Cx43 expression in parietal cortex"
-names(dat)[24] <- "Cx43 expression in striatum" # striatum of basal ganglia
-names(dat)[25] <- "GDNF expression in midbrain SN" # substantia nigra
-names(dat)[26] <- "GDNF expression in parietal cortex"
-names(dat)[27] <- "GDNF expression in striatum" # striatum of basal ganglia
-names(dat)[28] <- "GFAP expression in midbrain SN" # substantia nigra
-names(dat)[29] <- "GFAP expression in parietal cortex"
-names(dat)[30] <- "GFAP expression in striatum" # striatum of basal ganglia
-names(dat)[31] <- "Iba1 expression in parietal cortex"
+names(dat)[20] <- "ALdh1L1 expression in midbrain SN" # substantia nigra
+names(dat)[21] <- "Aldh1L1 expression in parietal cortex"
+names(dat)[22] <- "Aldh1l1 expression in striatum" # striatum of basal ganglia
+names(dat)[23] <- "Cx43 expression in midbrain SN" # substantia nigra
+names(dat)[24] <- "Cx43 expression in parietal cortex"
+names(dat)[25] <- "Cx43 expression in striatum" # striatum of basal ganglia
+names(dat)[26] <- "GFAP expression in midbrain SN" # substantia nigra
+names(dat)[27] <- "GFAP expression in parietal cortex"
+names(dat)[28] <- "GFAP expression in striatum" # striatum of basal ganglia
+names(dat)[29] <- "Iba1 expression in parietal cortex"
 
-names(dat)[32] <- "Puncta per cell in caudate" # caudate nucleus of basal ganglia
-names(dat)[33] <- "Puncta per cell in globus pallidus" # globus pallidus of basal ganglia
-names(dat)[34] <- "Puncta per cell in putamen" # putamen of basal ganglia
-names(dat)[35] <- "Puncta per cell in frontal cortex"
-names(dat)[36] <- "Puncta per cell in insular cortex"
-names(dat)[37] <- "Puncta per cell in midbrain SN" # substantia nigra
-names(dat)[38] <- "Puncta per cell in parietal cortex"
+names(dat)[30] <- "Puncta per cell in caudate" # caudate nucleus of basal ganglia
+names(dat)[31] <- "Puncta per cell in globus pallidus" # globus pallidus of basal ganglia
+names(dat)[32] <- "Puncta per cell in putamen" # putamen of basal ganglia
+names(dat)[33] <- "Puncta per cell in frontal cortex"
+names(dat)[34] <- "Puncta per cell in insular cortex"
+names(dat)[35] <- "Puncta per cell in midbrain SN" # substantia nigra
+names(dat)[36] <- "Puncta per cell in parietal cortex"
 
 continuousVars <- c("Age (years)", 
                     "PD duration (years)", 
@@ -73,9 +75,6 @@ continuousVars <- c("Age (years)",
                     "Cx43 expression in midbrain SN", # substantia nigra
                     "Cx43 expression in parietal cortex",
                     "Cx43 expression in striatum of basal ganglia", # striatum of basal ganglia
-                    "GDNF expression in midbrain SN", # substantia nigra
-                    "GDNF expression in parietal cortex",
-                    "GDNF expression in striatum", # striatum of basal ganglia
                     "GFAP expression in midbrain SN", # substantia nigra
                     "GFAP expression in parietal cortex",
                     "GFAP expression in striatum", # striatum of basal ganglia

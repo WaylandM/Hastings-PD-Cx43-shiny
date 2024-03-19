@@ -5,9 +5,8 @@ account: hastings
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10710451
-bundleId: 8145402
+bundleId: 8289028
 url: https://hastings.shinyapps.io/Connexin_43_pathology_in_late-stage_human_Parkinsons_brains/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: data/data original.csv
